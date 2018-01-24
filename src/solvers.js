@@ -17,7 +17,40 @@
 
 window.findNRooksSolution = function(n) {
   var solution = undefined; //fixme
+  
+  // create a new board
+  let board = new Board({n: n});
+  let boardArray = board.rows();
+  
+  // declare remainingRooks
+  let remainingRooks = n;
+  
+  // for loop looping through rows
+  for (let row = 0; row < boardArray.length; row++) {
+    
+    // for loop looping through cols
+    for (let col = 0; col < boardArray.length; col++) {
+      // check to see if there's any conflict (hasRookConflict?)
+      console.log('toggling', row, col, board.rows());
+      
+      board.togglePiece(row, col);
+      if (!board.hasAnyRooksConflicts()) {
+        // if it doesn't, toggle at that position
+        // increment row & col by 1
+        // row += 1;
+        // col += 1;
+        // decrease remainingRooks by 1
+        remainingRooks -= 1;
+        // what if remainingRooks never gets to 0??
+      } else {
+        board.togglePiece(row, col);
+      }
+    }
+  }
 
+  // set solution to our .rows()
+  solution = board.rows();
+  
   console.log('Single solution for ' + n + ' rooks:', JSON.stringify(solution));
   return solution;
 };
