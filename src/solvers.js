@@ -29,18 +29,16 @@ window.findNRooksSolution = function(n) {
   for (let row = 0; row < boardArray.length; row++) {
     
     // for loop looping through cols
-    for (let col = 0; col < boardArray.length; col++) {
+    for (let col = row; col < boardArray.length; col++) {
       // check to see if there's any conflict (hasRookConflict?)
-      console.log('toggling', row, col, board.rows());
+      // console.log('toggling', row, col, board.rows());
       
       board.togglePiece(row, col);
       if (!board.hasAnyRooksConflicts()) {
         // if it doesn't, toggle at that position
-        // increment row & col by 1
-        // row += 1;
-        // col += 1;
         // decrease remainingRooks by 1
         remainingRooks -= 1;
+        break;
         // what if remainingRooks never gets to 0??
       } else {
         board.togglePiece(row, col);
