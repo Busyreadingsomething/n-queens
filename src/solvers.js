@@ -40,47 +40,46 @@ window.findNRooksSolution = function(n) {
 
 // return the number of nxn chessboards that exist, with n rooks placed such that none of them can attack each other
 window.countNRooksSolutions = function(n) {
-  var solutionList = [];
-  return;
-  // inner recrusive function that takes, chessboard and remaining pieces
-  var exploreBoard = function(board, remainingRooks) {
-    // if remaining pieces equal zero
-    if (remainingRooks === 0) {
-      // increment solution count
-      var res = JSON.stringify(board.rows());
-      if (!solutionList.includes(res)) {
-        solutionList.push(res);
+  // create an empty sol'n array
+  var solutions = [];
+  // loop through the col
+  var possibleRows = [];
+  for (var col = 0; col < n; col++) {
+    // generate an array where col is 1, but all other are 0
+    var row = _.range(n).map(function(item, i) {
+      if (i === col) {
+        return 1;
+      } else {
+        return 0;
       }
-      return;
-    }
-    // for loop through the rows
-    for (let row = 0; row < board.get('n'); row++) {
-      // for loop through the columns
-      for (let col = 0; col < board.get('n'); col++) {
-        // check to see if piece is already there
-        if (board.get(row)[col] > 0) {
-          // continue
-          continue;
-        } else {
-          // toggle at that position
-          board.togglePiece(row, col);
-          // check for conflicts
-          if (!board.hasAnyRooksConflicts()) {
-            // if no conflict - explore
-            exploreBoard(new Board(board.rows()), remainingRooks - 1);
-            // recurse passing new chessboard and remaining pieces - 1
-          }
-          board.togglePiece(row, col);
-          // else do nothing
-        }
+    });
+    
+    possibleRows.push(row);
+  }
+  // inner function - depth first search - paramater current board, remaining possibilites
+  var depthFirstSearch = function(rowsSoFar, remainingPossibleRows) {
+    // if remaining poss is none
+    if (remainingPossibleRows.length === 0) {
+      // push the current board into solution array
+      solutions.push(rowsSoFar);
+    } else {
+    // else recurse for each possibility decrement remaining possibilities by 'one'
+      for (var i = 0; i < remainingPossibleRows.length; i++) {
+        var copySoFar = rowsSoFar.slice();
+        copySoFar.push(remainingPossibleRows[i]);
+        var copyPossibleRows = remainingPossibleRows.filter(function(item, j) {
+          return i !== j;
+        });
+        depthFirstSearch(copySoFar, copyPossibleRows);
       }
     }
   };
-  
-  exploreBoard(new Board({n: n}), n);
-  var solutionCount = solutionList.length;
-  console.log('Number of solutions for ' + n + ' rooks:', solutionCount);
+  depthFirstSearch([], possibleRows);
+  // invoke inner function on each possible rows
+  solutionCount = solutions.length;
+  // solutionCount set to solution array length
   return solutionCount;
+  // return solutionCount;
 };
 
 // return a matrix (an array of arrays) representing a single nxn chessboard, with n queens placed such that none of them can attack each other
@@ -155,6 +154,58 @@ window.findNQueensSolution = function(n) {
 // return the number of nxn chessboards that exist, with n queens placed such that none of them can attack each other
 window.countNQueensSolutions = function(n) {
   var solutionCount = undefined; //fixme
+
+  // create an empty sol'n array
+  var solutions = [];
+  // loop through the col
+  var possibleRows = [];
+  for (var col = 0; col < n; col++) {
+    // generate an array where col is 1, but all other are 0
+    var row = _.range(n).map(function(item, i) {
+      if (i === col) {
+        return 1;
+      } else {
+        return 0;
+      }
+    });
+    
+    possibleRows.push(row);
+  }
+  // inner function - depth first search - paramater current board, remaining possibilites
+  var depthFirstSearch = function(rowsSoFar, remainingPossibleRows) {
+    // if remaining poss is none
+    if (remainingPossibleRows.length === 0) {
+      // push the current board into solution array
+      solutions.push(rowsSoFar);
+    } else {
+    // else recurse for each possibility decrement remaining possibilities by 'one'
+      for (var i = 0; i < remainingPossibleRows.length; i++) {
+        var copySoFar = rowsSoFar.slice();
+        copySoFar.push(remainingPossibleRows[i]);
+        var copyPossibleRows = remainingPossibleRows.filter(function(item, j) {
+          return i !== j;
+        });
+        depthFirstSearch(copySoFar, copyPossibleRows);
+      }
+    }
+  };
+  depthFirstSearch([], possibleRows);
+
+  // declare QueensSol'n
+  // solutions filter
+  var queensSolutions = solutions.filter(function(soln) {
+    var board = new Board(soln);
+    return !(board.hasAnyMajorDiagonalConflicts() || board.hasAnyMinorDiagonalConflicts());
+  });
+  
+  // console.log('Rooks solns', solutions.length);
+  // console.log('Queens solns', queensSolutions.length);
+  // console.log(JSON.stringify(queensSolutions));
+
+  solutionCount = queensSolutions.length;
+  // solutionCount set to solution array length
+  return solutionCount;
+  // return solutionCount;
 
   console.log('Number of solutions for ' + n + ' queens:', solutionCount);
   return solutionCount;
