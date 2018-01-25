@@ -1,4 +1,4 @@
-/*           _
+ /*           _
    ___  ___ | |_   _____ _ __ ___
   / __|/ _ \| \ \ / / _ \ '__/ __|
   \__ \ (_) | |\ V /  __/ |  \__ \
@@ -17,46 +17,31 @@
 
 window.findNRooksSolution = function(n) {
   var solution = undefined; //fixme
-  
+
   // create a new board
-  let board = new Board({n: n});
-  let boardArray = board.rows();
+  var board = new Board({n: n});
   
-  // declare remainingRooks
-  let remainingRooks = n;
+  // create a column variable
+  var col = 0;
   
-  // for loop looping through rows
-  for (let row = 0; row < boardArray.length; row++) {
-    
-    // for loop looping through cols
-    for (let col = 0; col < boardArray.length; col++) {
-      // check to see if there's any conflict (hasRookConflict?)
-      // console.log('toggling', row, col, board.rows());
-      
-      board.togglePiece(row, col);
-      if (!board.hasAnyRooksConflicts()) {
-        // if it doesn't, toggle at that position
-        // decrease remainingRooks by 1
-        remainingRooks -= 1;
-        break;
-        // what if remainingRooks never gets to 0??
-      } else {
-        board.togglePiece(row, col);
-      }
-    }
+  // loop through the rows
+  for (var row = 0; row < n; row++) {
+    // toggle at the current row at column
+    board.togglePiece(row, col);
+    // after we toggle, increment col by one
+    col += 1;
   }
 
-  // set solution to our .rows()
+  // set sol'n equal to board rows
   solution = board.rows();
   
-  console.log('Single solution for ' + n + ' rooks:', JSON.stringify(solution));
   return solution;
 };
 
 // return the number of nxn chessboards that exist, with n rooks placed such that none of them can attack each other
 window.countNRooksSolutions = function(n) {
   var solutionList = [];
-  
+  return;
   // inner recrusive function that takes, chessboard and remaining pieces
   var exploreBoard = function(board, remainingRooks) {
     // if remaining pieces equal zero
