@@ -145,25 +145,38 @@
     // test if a specific major diagonal on this board contains a conflict
     hasMajorDiagonalConflictAt: function(majorDiagonalColumnIndexAtFirstRow) {
 
-      // count var
+      
+      // declare count
+      let startRow, col;
       let count = 0;
       
-      // create board var
-      let board = this.rows();
+      // if the major > 0
+      if (majorDiagonalColumnIndexAtFirstRow > 0) {
+        //   set the row to 0;
+        startRow = 0;        
+        //   set the col to major
+        col = majorDiagonalColumnIndexAtFirstRow;
+      } else {
+        // if major < 0
+        //   set col to 0;
+        col = 0;
+        //   set row to abs(major);
+        startRow = -majorDiagonalColumnIndexAtFirstRow;
+      }
       
-      // loop through board
-      for (let row = 0; row < board.length; row++) {
-        for (let col = 0; col < board[row].length; col++) {
-          // nest another loop
-          if (col - row === majorDiagonalColumnIndexAtFirstRow) {
-          // if i-j === majorDiagonalColumnIndex, then add to count
-            count += board[row][col];
-            // break out of inner loop
-            break;
-          }
+      // loop through the rows
+      for (let row = startRow; row < this.get('n'); row++) {
+        // add to the count board at row , at col
+        count += this.get(row)[col];
+        // increment col by 1
+        col++;
+        // if col === n, break out of loop
+        if (col === this.get('n')) {
+          break;
         }
       }
-      // return comparison of count to 1
+      
+      // return comparison
       return count > 1;
     },
 
