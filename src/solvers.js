@@ -157,7 +157,7 @@ window.findNQueensSolution = function(n) {
 // return the number of nxn chessboards that exist, with n queens placed such that none of them can attack each other
 window.countNQueensSolutions = function(n) {
   // declare solutionList
-  var solutionList = [];
+  var solutionCount = 0;
   // genereate possible rows from 0 to n-1
   var possibleRows = _.range(n);
   
@@ -166,7 +166,8 @@ window.countNQueensSolutions = function(n) {
     // if PRR is 0
     if (remainingPossibleRows.length === 0) {
       // push to solution list
-      solutionList.push(currentBoard);
+      // solutionList.push(currentBoard);
+      solutionCount++;
       return;
     }
     // loop through possible remaining rows
@@ -197,8 +198,8 @@ window.countNQueensSolutions = function(n) {
   };
   depthFirstSearch([], possibleRows);
   
-  console.log(JSON.stringify(solutionList));
-  return solutionList.length;
+  // console.log(JSON.stringify(solutionList));
+  return solutionCount;
   //invoke inner function - passing [] and list of all possible rows
   
   // return length of solution list
